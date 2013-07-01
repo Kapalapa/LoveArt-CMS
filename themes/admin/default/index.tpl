@@ -12,9 +12,9 @@
 	    <meta name="revisit-after" content="7 days">
 	    <meta name="copyright" content="(c)2013 design & code by Karel Juřička">
 	    
-	    <link rel="stylesheet" href="themes/default/styles.css" type="text/css" media="screen"/>
-		<script type="text/javascript" src="themes/default/js/jquery.min.js"></script>
-		<script type="text/javascript" src="themes/default/js/scripts.js"></script>
+	    <link rel="stylesheet" href="<% absolute_path %>styles/styles.css" type="text/css" media="screen"/>
+		<script type="text/javascript" src="<% absolute_path %>js/jquery.min.js"></script>
+		<script type="text/javascript" src="<% absolute_path %>js/scripts.js"></script>
 			     
 	    <title><% title %></title>
   	</head>
@@ -22,34 +22,34 @@
 	  	<div align='center' id="web-top">
 		  	<div class='part-top'>
 		    	<div class='logo'>
-		     		<a href="" title="homepage"><img src='themes/default/images/logo.png' alt='logo'></a>
+		     		<a href="" title="homepage"><img src='<% absolute_path %>images/logo.png' alt='logo'></a>
 		      	</div>
 		      
 				<div class='top-right'>
 		      		<ul class='social-network-links'>
-		        		<li><a href='https://www.facebook.com/loveartcz' title='about' target="_blank"><img src='themes/default/images/fb_icon.png' alt='#about'/></a></li>
-		          		<li><a href='#tw' title='about'><img src='themes/default/images/tw_icon.png' alt='#about'/></a></li>
-		          		<li><a href='#lin' title='about'><img src='themes/default/images/lin_icon.png' alt='#about'/></a></li>
+		        		<li><a href='https://www.facebook.com/loveartcz' title='about' target="_blank"><img src='<% absolute_path %>images/fb_icon.png' alt='#about'/></a></li>
+		          		<li><a href='#tw' title='about'><img src='<% absolute_path %>images/tw_icon.png' alt='#about'/></a></li>
+		          		<li><a href='#lin' title='about'><img src='<% absolute_path %>images/lin_icon.png' alt='#about'/></a></li>
 		        	</ul>
 		        	<div class='def-footer'></div>
 		        		<ul class='menu'>
-		        			<li><a id="link-about" title='about'><img src='themes/default/images/menu_about.png' alt='about'/></a></li>
-		          			<li><a id="link-gallery" title='gallery'><img src='themes/default/images/menu_gallery.png' alt='gallery'/></a></li>
-		          			<li><a id="link-skills" title='skills'><img src='themes/default/images/menu_skills.png' alt='skills'/></a></li>
-		          			<li><a id="link-contact" title='contact'><img src='themes/default/images/menu_contact.png' alt='contact'/></a></li>
+		        			<li><a id="link-about" title='about'><img src='<% absolute_path %>images/menu_about.png' alt='about'/></a></li>
+		          			<li><a id="link-gallery" title='gallery'><img src='<% absolute_path %>images/menu_gallery.png' alt='gallery'/></a></li>
+		          			<li><a id="link-skills" title='skills'><img src='<% absolute_path %>images/menu_skills.png' alt='skills'/></a></li>
+		          			<li><a id="link-contact" title='contact'><img src='<% absolute_path %>images/menu_contact.png' alt='contact'/></a></li>
 		        		</ul>
 		      
 				</div>
 				<div class='def-footer'></div>
 		     	<div class='about' id="about">
 		      		<div class='about-title'></div>
-		        	<img src='themes/default/images/photoshop_bubble.png' alt='photoshop bubble' class='photoshop-bubble'/>
+		        	<img src='<% absolute_path %>images/photoshop_bubble.png' alt='photoshop bubble' class='photoshop-bubble'/>
 		        	<div class='def-footer'></div>
 		        	<div class='about-text'></div>
 		    	</div>
 					
 				<div class="profil-photo">
-					<img src="themes/default/images/profil_photo.png" alt="profil photo">
+					<img src="<% absolute_path %>images/profil_photo.png" alt="profil photo">
 				</div>
 
 				<div class="def-footer"></div>
@@ -59,10 +59,10 @@
 			<div class="pink-line">
 				<div class="slideshow">
 					<div class="arrow-left">
-						<a href="" title="previos slide"><img src="themes/default/images/arrow_left.png" alt="arrow left"></a>
+						<a href="" title="previos slide"><img src="<% absolute_path %>images/arrow_left.png" alt="arrow left"></a>
 					</div>
 					<div class="slideshow-image">
-						<a href="" title=""><img src="themes/default/images/slide_typo.png"></a>		
+						<a href="" title=""><img src="<% absolute_path %>images/slide_typo.png"></a>		
 					</div>
 					<div class="slideshow-data">
 						<h2><% content %></h2>
@@ -74,7 +74,7 @@
 						</div>
 					</div>
 					<div class="arrow-right">
-						<a href="" title="previos slide"><img src="themes/default/images/arrow_right.png" alt="arrow left"></a>
+						<a href="" title="previos slide"><img src="<% absolute_path %>images/arrow_right.png" alt="arrow left"></a>
 					</div>
 					<div class="def-footer"></div>
 				</div>
@@ -90,7 +90,7 @@
 						<a href="" title="view more" class="view-more">view more</a>
 					</div>
 					<div class="gallery-item-image">
-						<img src="themes/default/images/tricar_demo.png" alt="lachim">
+						<img src="<% absolute_path %>images/tricar_demo.png" alt="lachim">
 					</div>
 					<div class="def-footer"></div>
 				</div>
@@ -103,7 +103,7 @@
 						<a href="" title="view more" class="view-more">view more</a>
 					</div>
 					<div class="gallery-item-image">
-						<img src="themes/default/images/zurafa_demo.png" alt="lachim">
+						<img src="<% absolute_path %>images/zurafa_demo.png" alt="lachim">
 					</div>
 					<div class="def-footer"></div>
 				</div>
@@ -116,7 +116,7 @@
 						<a href="" title="view more" class="view-more">view more</a>
 					</div>
 					<div class="gallery-item-image">
-						<img src="themes/default/images/battlestar_demo.png" alt="lachim">
+						<img src="<% absolute_path %>images/battlestar_demo.png" alt="lachim">
 					</div>
 					<div class="def-footer"></div>
 				</div>
@@ -130,14 +130,14 @@
 			</div>
 			<div class="skills-line">
 				<ul class="skills-content">
-					<li><img src="themes/default/images/skill_ps.png" alt="adobe photoshop"></li>
-					<li><img src="themes/default/images/skill_ai.png" alt="adobe illustrator"></li>
-					<li><img src="themes/default/images/skill_html.png" alt="html"></li>
-					<li><img src="themes/default/images/skill_css.png" alt="css"></li>
-					<li><img src="themes/default/images/skill_php.png" alt="php"></li>
-					<li><img src="themes/default/images/skill_sql.png" alt="sql"></li>
-					<li><img src="themes/default/images/skill_jquery.png" alt="jquery"></li>
-					<li><img src="themes/default/images/skill_c.png" alt="c"></li>
+					<li><img src="<% absolute_path %>images/skill_ps.png" alt="adobe photoshop"></li>
+					<li><img src="<% absolute_path %>images/skill_ai.png" alt="adobe illustrator"></li>
+					<li><img src="<% absolute_path %>images/skill_html.png" alt="html"></li>
+					<li><img src="<% absolute_path %>images/skill_css.png" alt="css"></li>
+					<li><img src="<% absolute_path %>images/skill_php.png" alt="php"></li>
+					<li><img src="<% absolute_path %>images/skill_sql.png" alt="sql"></li>
+					<li><img src="<% absolute_path %>images/skill_jquery.png" alt="jquery"></li>
+					<li><img src="<% absolute_path %>images/skill_c.png" alt="c"></li>
 				</ul>
 				<div class="def-footer"></div>
 			</div>
@@ -190,9 +190,9 @@
 						</li>
 					</ul>
 					<ul class="list-of-links">
-						<li><a href="" title="facebook"><img src="themes/default/images/fb_icon_big.png"></a></li>
-						<li><a href="" title="twitter"><img src="themes/default/images/tw_icon_big.png"></a></li>
-						<li><a href="" title="linkedin"><img src="themes/default/images/lin_icon_big.png"></a></li>
+						<li><a href="" title="facebook"><img src="<% absolute_path %>images/fb_icon_big.png"></a></li>
+						<li><a href="" title="twitter"><img src="<% absolute_path %>images/tw_icon_big.png"></a></li>
+						<li><a href="" title="linkedin"><img src="<% absolute_path %>images/lin_icon_big.png"></a></li>
 					</ul>
 				</div>
 				<div class="def-footer"></div>

@@ -9,11 +9,11 @@
 	require_once 'config.php';
 
 	// Load core class files
-	require_once $_config['web']['basedir']. '/core/autoloading.class.php';	
+	require_once $_config['web']['basedir']. '/lib/autoloading.class.php';	
 	
 	// Set autoloading dirs
 	autoLoading::$basedir = $_config['web']['basedir'];
-	autoloading::$classdir = 'core';
+	autoloading::$classdir = 'lib';
 
 	// Autoload files
 	spl_autoload_register(array('autoLoading', 'classLoader'));
@@ -21,8 +21,9 @@
 	// Set web dir
 	web::$dir = $_config['web']['basedir'];
 
-	// Set theme dir
-	theme::$themesDir = 'themes';
+	// Set theme web dir
+	theme::$workingDir = $_config['web']['tpldir'];
+	theme::$themesWebDir = 'themes/admin';
 
 	// Instanciate main object of website
 	$website = new Web($_config);

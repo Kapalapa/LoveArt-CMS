@@ -17,8 +17,10 @@
 
 
 	/* DIR Configuration */
+	$_config['web']['tpldir'] = '/projects/loveart_cms';
 
 	$_config['web']['basedir'] = ROOTPATH;
 
 	$_config['web']['url'] = 'http://localhost/projekty/loveart_cms';
-?>
+
+?>	

@@ -30,6 +30,8 @@ class Module {
 
 		$this->moduleOutput['title'] = 'Web Title';
 		$this->moduleOutput['author'] = 'Karel Juricka';
+
+
 	}
 
 	/* Load plugins to module

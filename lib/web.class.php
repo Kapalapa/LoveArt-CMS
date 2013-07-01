@@ -12,15 +12,16 @@ class Web {
 	public static $page;
 
 	// Theme handler
-	private $theme;
+	protected $theme;
 
 	// Admin indentificator
-	private $admin;
+	protected $admin = false;
 
 	// Modules
-	private $modules = array (
+	protected $modules = array (
 		'head' => '',
-		'content' => ''
+		'content' => '',
+		'absolute_path' => ''
 	);
 
 	/* WEB inicialization
@@ -28,9 +29,6 @@ class Web {
      * @param $admin boolean, true if is admin interface
     */ 
 	public function __construct($_config, $admin = false) {
-
-		// Set admin status
-		$this->admin = $admin;
 
 		$act_page = (!empty($_GET['page'])) ?  $_GET['page'] : 'index';
 
@@ -46,7 +44,7 @@ class Web {
 			// TODO - some class members can be loaded from DB to pretend extensive loading from DB
 
 			// Inicialize theme
-			$this->theme = $this->webThemeInit($_config['web']);
+			$this->theme = $this->webThemeInit();
 
 			// Inicialize modules
 			$this->webModulesInit();
@@ -71,14 +69,14 @@ class Web {
 	 * @param $page active page
 	 * @return page id
 	*/
-	private function loadPage($page) {
+	protected function loadPage($page) {
 
 	}
 
 	/* Database establish
      * @param $dbconfig database configuration data
     */ 
-	private function establishDB($dbconfig) {
+	protected function establishDB($dbconfig) {
 
 		// Set dns
 		$dns = 'mysql:dbname='.$dbconfig['dbname'].';host='. $dbconfig['server'] .';charset='.$dbconfig['charset'].'';
@@ -92,22 +90,21 @@ class Web {
 	 * -- TODO: DEFENSIVE PROGRAMMING
      * @param $webconfig webconfiguration data
     */ 
-	private function webThemeInit($webconfig) {
+	protected function webThemeInit() {
 
 		// Instanciate theme
-		return new Theme();
+		return new Theme((get_class() == 'web') ? false :  true);
 
 	}
 
 	/* Init modules on webpage
 	*/
-	private function webModulesInit() {
+	protected function webModulesInit() {
 		
 		// Loop inicializing modules
 		foreach($this->modules as $key => $value) {
 			$this->modules[$key] = $this->theme->initModule($key);	
 		}
-
 	}
 
 	public function showWebsite() {

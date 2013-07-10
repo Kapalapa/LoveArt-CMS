@@ -3,6 +3,9 @@
 class Admin extends Web {
 
 
+	/* Admin inicialization is subclass of web
+	 * $_config 
+	*/
 	public function __construct($_config, $admin = false) {
 
 		$logged = false;

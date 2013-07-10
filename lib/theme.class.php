@@ -52,9 +52,11 @@ class Theme {
 	}
 
 	/* Method to init specific module
+	 * $moduleName name of module to init
     */ 
 	public function initModule($moduleName) {
 
+		// Instanciace new module
 		$module = new Module($moduleName);
 
 		// Get templates of module
@@ -66,7 +68,11 @@ class Theme {
 		}		 
 
 	}
-
+	
+	/* Method that make replace of part of template to module output
+	 * @param $subject place identificator
+	 * @param $item module to insert
+	*/
 	private function templateReplace($subject, $item) {
 
 		$this->themeData = str_replace('<% '. $subject .' %>', $item, $this->themeData);
@@ -77,9 +83,13 @@ class Theme {
 	*/
 	private function loadThemeData($specific) {
 
+		// Set theme folder
 		$themefolder = ($this->admin) ? self::$themesAdminDir : self::$themesWebDir; 
 
+		// Set file name
 		$filename = ($specific == NULL) ? 'index.tpl' : $specific .'.tpl';
+
+		var_dump($filename);
 
 		// If file not exit's, throw expcetion
 

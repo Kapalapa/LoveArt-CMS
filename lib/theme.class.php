@@ -17,6 +17,9 @@ class Theme {
 	// Active admin theme
 	public static $activeAdminTheme = 'default';
 
+	// Filename
+	private $filename = '';
+
 	// Theme full dir
 	private $themeDir = '';
 
@@ -33,11 +36,16 @@ class Theme {
 		// Set admin status
 		$this->admin = $admin;
 
+		$this->filename = ($specific == NULL) ? 'index.tpl' : $specific .'.tpl';
+
+		// Get active theme from DB
+		// TODO: LOAD ACTIVE THEME FROM FB
+
 		// Set theme full directory
 		$this->themedir = ($this->admin) ? self::$themesAdminDir . '/' . self::$activeAdminTheme : self::$themesWebDir . '/' . self::$activeTheme;
 
 		// Load theme from file
-		$this->themeData = $this->loadThemeData($specific);
+		$this->themeData = $this->loadThemeData();
 
 		// Add absolute path to template
 		$this->templateReplace('absolute_path',  theme::$workingDir . '/' . $this->themedir . '/');
@@ -81,19 +89,14 @@ class Theme {
 	/* Method to load theme data from file to string
 	 * @return theme data string
 	*/
-	private function loadThemeData($specific) {
+	private function loadThemeData() {
 
 		// Set theme folder
 		$themefolder = ($this->admin) ? self::$themesAdminDir : self::$themesWebDir; 
 
-		// Set file name
-		$filename = ($specific == NULL) ? 'index.tpl' : $specific .'.tpl';
-
-		var_dump($filename);
 
 		// If file not exit's, throw expcetion
-
-		if (($readData = file_get_contents(web::$dir . '/' . $this->themedir . '/' . $filename)) === FALSE)
+		if (($readData = file_get_contents(web::$dir . '/' . $this->themedir . '/' . $this->filename)) === FALSE)
 			throw new Exception('Theme\'s file doent exists');
 
 		// return string with data

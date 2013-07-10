@@ -28,6 +28,7 @@ class Module {
     */ 
 	private function headModule() {
 
+		// TODO: LOAD THIS DATA FROM DB
 		$this->moduleOutput['title'] = 'Web Title';
 		$this->moduleOutput['author'] = 'Karel Juricka';
 	}
@@ -38,6 +39,8 @@ class Module {
 	private function loadModule($modulename) {
 
 		// Call plugin
+		// TODO: LOAD MODULES DATA FROM DB
+		// -> load all plugins related with specific module in RANK order
 		$plugin = new StaticPage();
 		$this->moduleOutput['content'] = $plugin->getOutput();
 	}

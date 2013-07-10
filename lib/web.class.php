@@ -26,9 +26,8 @@ class Web {
 
 	/* WEB inicialization
      * @param $_config configuration data
-     * @param $admin boolean, true if is admin interface
     */ 
-	public function __construct($_config, $admin = false) {
+	public function __construct($_config) {
 
 		$act_page = (!empty($_GET['page'])) ?  $_GET['page'] : 'index';
 
@@ -66,6 +65,7 @@ class Web {
 	 * Check in database if page exits
 	 * -- throw expcetion if not
 	 * -- get page id which all cms then use as identificator
+	 * -- get some info data about page
 	 * @param $page active page
 	 * @return page id
 	*/

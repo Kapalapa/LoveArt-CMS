@@ -1,5 +1,7 @@
 <?php
 
+define("DEFAULT_ADMIN_PAGE", "homepage");
+
 class Admin extends Web {
 
 
@@ -10,42 +12,47 @@ class Admin extends Web {
 
 		$logged = true;
 
-		// If not logged in, show login
+		// Set debug mode
+		self::$debug = $_config['admin']['debug'];
 
-		$act_page = (!empty($_GET['page'])) ?  $_GET['page'] : 'index';
+		// Set active page
+		$act_page = (!empty($_GET['page'])) ?  $_GET['page'] : DEFAULT_ADMIN_PAGE;
 
-		try {
+		// Establish db connection
+		self::$db = new Database($_config['db']['server'], $_config['db']['dbname'], $_config['db']['username'], $_config['db']['password'], $_config['db']['charset'], $_config['db']['prefix']);
 
-			// Get page from db
-			self::$page = $this->loadPage($act_page);
+		// Configure website from database data
+		$this->loadWebConfig($_config['admin']['settings'], true);
 
-			// Connect to database
-			self::$db = $this->establishDB($_config['db']);
+		// Get page from db
+		$this->page = $this->loadPage($act_page, true);
 
-			// Configure website from database data
-			// TODO - some class members can be loaded from DB to pretend extensive loading from DB
+		// Inicialize theme
 
-			// If not logged in, show login
-			if (!$logged)
-				$this->theme = $this->adminLogin();
-			else
-				// Inicialize theme
-				$this->theme = $this->webThemeInit();
+		if (!$logged)
+			$this->theme = $this->adminLogin();
+		else
+			$this->theme = $this->adminThemeInit();
 
-			// Inicialize modules
-			$this->webModulesInit();
+		// Inicialize modules
+		$this->webModulesInit();
+
+		(self::$debug ) ? var_dump(self::$errors) : null;
+
+	}
 
 
-		}
+	/* Instanciate webtheme
+	 * -- TODO: DEFENSIVE PROGRAMMING
+     * @param $webconfig webconfiguration data
+    */ 
+	private function adminThemeInit() {
 
-		// TODO : EXCEPTION CLASS
-		catch (PDOException $e)	{
-			printf("Connection failed: ". $e->getMessage());
-		}
+		// DEBUG OUTPUT
+		(self::$debug ) ? var_dump($this->page) : null;
 
-		catch (Exception $e) {
-			printf("Error: ". $e->getMessage() ."<br />");
-		}	
+		// Instanciate theme
+		return new Theme(true, (!empty($this->page['theme'])) ? $this->page['theme'] : null);
 
 	}
 

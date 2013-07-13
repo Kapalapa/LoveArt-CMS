@@ -7,36 +7,36 @@ class Module {
 	/* Module inicialization
      * @param $modulename name of module
     */ 
-	public function __construct($modulename) {
+	public function __construct($modulename, $page) {
 		
 		// Load plugins to module
 		switch($modulename) {
 			
 			// headmodule -> speficif operations
 			case 'head':
-				$this->headModule();
+				$this->headModule($page);
 				break;
 		
 			// others modules -> get plugins	
 			default:
-				$this->loadModule($modulename);
+				$this->loadModule($modulename, $page);
 				break;
 		}
 	}
 
 	/* Head module set html head data
     */ 
-	private function headModule() {
+	private function headModule($page) {
 
-		// TODO: LOAD THIS DATA FROM DB
-		$this->moduleOutput['title'] = 'Web Title';
+		// TODO: ADD MORE DATA FROM DB
+		$this->moduleOutput['title'] =  (empty($page['title'])) ? web::$settings['title'] : web::$settings['title']. " - " . $page['title'];
 		$this->moduleOutput['author'] = 'Karel Juricka';
 	}
 
 	/* Load plugins to module
      * @param $modulename name of module
     */ 
-	private function loadModule($modulename) {
+	private function loadModule($modulename, $page) {
 
 		// Call plugin
 		// TODO: LOAD MODULES DATA FROM DB

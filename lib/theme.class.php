@@ -36,10 +36,17 @@ class Theme {
 		// Set admin status
 		$this->admin = $admin;
 
+		// DEBUG OUTPUT
+		(web::$debug ) ? var_dump($this->admin) : null;
+
 		$this->filename = ($specific == NULL) ? 'index.tpl' : $specific .'.tpl';
 
-		// Get active theme from DB
-		// TODO: LOAD ACTIVE THEME FROM FB
+		if (!$admin) {
+			self::$activeTheme = web::$settings['theme'];
+		}
+		else
+			self::$activeAdminTheme = admin::$settings['theme'];
+
 
 		// Set theme full directory
 		$this->themedir = ($this->admin) ? self::$themesAdminDir . '/' . self::$activeAdminTheme : self::$themesWebDir . '/' . self::$activeTheme;
@@ -60,12 +67,13 @@ class Theme {
 	}
 
 	/* Method to init specific module
-	 * $moduleName name of module to init
+	 * @param $moduleName name of module to init
+	 * @return instance to module
     */ 
-	public function initModule($moduleName) {
+	public function initModule($moduleName, $page) {
 
 		// Instanciace new module
-		$module = new Module($moduleName);
+		$module = new Module($moduleName, $page);
 
 		// Get templates of module
 		$templates = $module->getOutput();
@@ -74,6 +82,8 @@ class Theme {
 		foreach($templates as $position => $template) {
 			$this->templateReplace($position, $template);
 		}		 
+
+		return $module;
 
 	}
 	

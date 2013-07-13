@@ -1,6 +1,5 @@
 <?php
 	
-
 	// Error reporting on
 	ini_set('display_errors',1); 
  	error_reporting(E_ALL);
@@ -23,7 +22,7 @@
 
 	// Set theme web dir
 	theme::$workingDir = $_config['web']['tpldir'];
-	theme::$themesWebDir = 'themes/admin';
+	theme::$themesWebDir = 'themes/web';
 
 	// Instanciate main object of website
 	$website = new Web($_config);

@@ -28,9 +28,12 @@ class Module {
     */ 
 	private function headModule($page) {
 
-		// TODO: ADD MORE DATA FROM DB
+		// Join webtitle with page title if exits
 		$this->moduleOutput['title'] =  (empty($page['title'])) ? web::$settings['title'] : web::$settings['title']. " - " . $page['title'];
-		$this->moduleOutput['author'] = 'Karel Juricka';
+		$this->moduleOutput['description'] = web::$settings['description'];
+		$this->moduleOutput['keywords'] = web::$settings['keywords'];
+		$this->moduleOutput['author'] = web::$settings['author'];
+		$this->moduleOutput['copyright'] = web::$settings['copyright'];
 	}
 
 	/* Load plugins to module

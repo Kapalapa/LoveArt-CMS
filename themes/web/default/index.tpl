@@ -1,16 +1,16 @@
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-	  	<meta name="keywords" content="home page" lang="cs">
+	  	<meta name="keywords" content="<% keywords %>" lang="cs">
 	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	    <meta http-equiv="Content-Script-Type" content="text/javascript">
 	    <meta http-equiv="Content-Language" content="cz">
-	    <meta name="description" content="Admin">
+	    <meta name="description" content="<% description %>">
 	    <meta name="robots" content="noindex, nofollow">
 	    <meta name="author" content="<% author %>">
 
 	    <meta name="revisit-after" content="7 days">
-	    <meta name="copyright" content="(c)2013 design & code by Karel Juřička">
+	    <meta name="copyright" content="<% copyright %>">
 	    
 	    <link rel="stylesheet" href="<% absolute_path %>styles/styles.css" type="text/css" media="screen"/>
 		<script type="text/javascript" src="<% absolute_path %>js/jquery.min.js"></script>

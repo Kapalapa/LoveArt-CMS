@@ -64,24 +64,27 @@ class Web {
 	}
 
 	/* Load webconfig from database, if empty, use configuration file settings
-	 * @param $config configuration data array 
+	 * @param $config configuration data array - specific for admin and web
 	*/
 	protected function loadWebConfig($settings, $admin = false) {
 
 		// Set table where pages are
 		$settingsTable = (!$admin) ? "settings" : "admin_settings";
 
-		var_dump($settingsTable);
-
 		// Select web settings from database	
 		try {
 		
-			self::$db->query("SELECT title, theme FROM ".database::$prefix.$settingsTable);
+			self::$db->query("SELECT title, description, keywords, author, copyright, theme FROM ".database::$prefix.$settingsTable);
 		
-		// If no row was selected, use config settings
-		// TODO: for every column check if it exits in db (is not NULL)
-		if (!(self::$settings = self::$db->single()))
-			self::$settings = $settings;
+			// If no row was selected, use config settings
+			if (!(self::$settings = self::$db->single()))
+				self::$settings = $settings;
+
+			// If specific settings is empty in DB, load from config
+			foreach($settings as $key => $value) {
+				if (empty(self::$settings[$key]))
+					self::$settings[$key] = $settings[$key];
+			}
 
 		}
 
@@ -95,9 +98,8 @@ class Web {
 		(self::$debug ) ? var_dump(self::$settings) : null;
 	}
 
-	/* TODO:
-	 * Check in database if page exits
-	 * -- throw expcetion if not
+	/* Load page data from database
+	 * in case of missing page use default missing page data
 	 * @param $page active page
 	 * @return hash with page info
 	*/
@@ -106,11 +108,43 @@ class Web {
 		// Set table where pages are
 		$pageTable = (!$admin) ? "page" : "admin_page";
 
-		// Load page data from DB
-		self::$db->query("SELECT id, name, title, theme FROM ".database::$prefix . $pageTable ." WHERE name = :pagename");
-		self::$db->bind(":pagename", $page);
+		try {
+			// Load page data from DB
+			self::$db->query("SELECT id, name, title, theme FROM ".database::$prefix . $pageTable ." WHERE name = :pagename");
+			self::$db->bind(":pagename", $page);
+
+			$results = self::$db->single();
+
+			if (empty($results))
+				return $this->missingPage($page, $admin);
 		
-		return self::$db->single();
+		}
+
+		// If db error, use configuration file settings
+		catch (PDOException $e) {
+			self::$errors['db'] = $e->getMessage();
+			// Generate missing page
+			return $this->missingPage($page, $admin);
+		}
+
+		var_dump(self::$db->single());
+
+		return $results;
+	}
+
+	/* Setup missing page
+	 * TODO: GENERATE MISSING PAGE
+	 * @param $page page name
+	 * @param $admin admin handler
+	*/
+	protected function missingPage($page, $admin) {
+
+		echo "sdasdsad";
+		$missingPage['id'] = -1;
+		$missingPage['theme'] = '404_notfound';
+
+		return $missingPage;
+
 	}
 
 	/* Init modules on webpage

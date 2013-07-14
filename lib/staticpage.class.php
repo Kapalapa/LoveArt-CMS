@@ -13,6 +13,6 @@ class StaticPage {
 		return $this->staticData;
 	}
 
-}
 
+}
 ?>

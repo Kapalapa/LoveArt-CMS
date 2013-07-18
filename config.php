@@ -44,6 +44,6 @@
 
 
 	/* Debugger */
-	$_config['web']['debug'] = true;
-	$_config['admin']['debug'] = true;
+	$_config['web']['debug'] = false;
+	$_config['admin']['debug'] = false;
 ?>	

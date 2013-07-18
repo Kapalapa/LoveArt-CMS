@@ -1,11 +1,12 @@
 <?php
 
-class StaticPage {
+class StaticContent {
 
 	// Static output data
 	private $staticData = '';
 
-	public function __construct() {
+	public function __construct($instance_id) {
+		echo $instance_id;
 		$this->staticData = 'Miluju te niky';
 	}
 

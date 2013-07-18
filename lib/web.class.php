@@ -127,7 +127,7 @@ class Web {
 			return $this->missingPage($page, $admin);
 		}
 
-		var_dump(self::$db->single());
+		(self::$debug ) ? var_dump(self::$db->single()) : null;
 
 		return $results;
 	}

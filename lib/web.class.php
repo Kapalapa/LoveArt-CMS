@@ -1,6 +1,7 @@
 <?php
 
 define ("DEFAULT_PAGE", "homepage");
+define("WEB_BOOL", false);
 
 class Web {
 
@@ -26,10 +27,11 @@ class Web {
 	public static $errors = array();
 
 	// Modules
-	protected $modules = array (
+	private $modules = array (
 		'head' => '',
 		'content' => '',
-		'absolute_path' => ''
+		'absolute_path' => '',
+		'admin_login' => ''
 	);
 
 	/* WEB inicialization
@@ -153,8 +155,12 @@ class Web {
 		
 		// Loop inicializing modules
 		foreach($this->modules as $key => $value) {
-			$this->modules[$key] = $this->theme->initModule($key, $this->page);	
+			// Instanciate new module
+			$this->modules[$key] = new Module($key, $this->page, WEB_BOOL);
+			// Add module output to theme
+			$this->theme->setModuleOutput($this->modules[$key]);
 		}
+
 	}
 
 	/* Show website output

@@ -67,13 +67,9 @@ class Theme {
 	}
 
 	/* Method to init specific module
-	 * @param $moduleName name of module to init
-	 * @return instance to module
+	 * @param $module instance of module
     */ 
-	public function initModule($moduleName, $page) {
-
-		// Instanciace new module
-		$module = new Module($moduleName, $page);
+	public function setModuleOutput($module) {
 
 		// Get templates of module
 		$templates = $module->getOutput();
@@ -82,8 +78,6 @@ class Theme {
 		foreach($templates as $position => $template) {
 			$this->templateReplace($position, $template);
 		}		 
-
-		return $module;
 
 	}
 	

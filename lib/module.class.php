@@ -11,9 +11,8 @@ class Module {
 	/* Module inicialization
      * @param $modulename name of module
     */ 
-	public function __construct($modulename, $page) {
+	public function __construct($modulename, $page, $admin) {
 		
-
 		// Load plugins to module
 		switch($modulename) {
 			
@@ -22,21 +21,23 @@ class Module {
 				$this->headModule($page);
 				break;
 		
+			case 'admin_login':
+				$this->moduleOutput[$modulename] = admin::loginForm();
+				break;
+
 			// others modules -> get plugins	
 			default:
-
 				// Load module data
-				$moduleTable = "module";
-				$contentTable = "content";
-				$pluginTable = "plugin";
+
+				$contentTable =  (!$admin) ? "content" : "admin_content";
 				web::$db->query("
 				SELECT
 						".database::$prefix ."plugin.name,
-						".database::$prefix ."content.plugin_instance_id
+						".database::$prefix . $contentTable .".plugin_instance_id
 				FROM 	
-						".database::$prefix . $moduleTable .",
+						".database::$prefix . "module,
 						".database::$prefix . $contentTable .", 
-						".database::$prefix . $pluginTable ."	
+						".database::$prefix . "plugin	
 				WHERE 	
 						".database::$prefix . "module.name = :modulename AND
 						page_id = :pageid AND

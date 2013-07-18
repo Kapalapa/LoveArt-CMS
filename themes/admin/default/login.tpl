@@ -15,7 +15,8 @@
 			     
 	    <title><% title %></title>
   	</head>
-  	<body>
-  		Login
+  	<body align="center">
+  		<h2>Login</h2>
+  		<% admin_login %>
 	</body>
 </html>

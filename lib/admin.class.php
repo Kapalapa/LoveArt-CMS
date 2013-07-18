@@ -1,8 +1,17 @@
 <?php
 
 define("DEFAULT_ADMIN_PAGE", "homepage");
+define("ADMIN_BOOL", true);
+
+
 
 class Admin extends Web {
+
+	private $modules = array (
+		'head' => '',
+		'absolute_path' => '',
+		'admin_login' => ''
+	);
 
 
 	/* Admin inicialization is subclass of web
@@ -10,7 +19,6 @@ class Admin extends Web {
 	*/
 	public function __construct($_config) {
 
-		$logged = true;
 
 		// Set debug mode
 		self::$debug = $_config['admin']['debug'];
@@ -29,36 +37,80 @@ class Admin extends Web {
 
 		// Inicialize theme
 
-		if (!$logged)
-			$this->theme = $this->adminLogin();
+		if (!isset($_SESSION['admin-user']))
+			$this->theme = new Theme(ADMIN_BOOL, 'login');
 		else
-			$this->theme = $this->adminThemeInit();
-
+			$this->theme = new Theme(ADMIN_BOOL, (!empty($this->page['theme'])) ? $this->page['theme'] : null);
 		// Inicialize modules
-		$this->webModulesInit();
+		$this->adminModulesInit();
 
 		(self::$debug ) ? var_dump(self::$errors) : null;
 
 	}
 
-
-	/* Instanciate webtheme
-	 * -- TODO: DEFENSIVE PROGRAMMING
-     * @param $webconfig webconfiguration data
-    */ 
-	private function adminThemeInit() {
-
-		// DEBUG OUTPUT
-		(self::$debug ) ? var_dump($this->page) : null;
-
-		// Instanciate theme
-		return new Theme(true, (!empty($this->page['theme'])) ? $this->page['theme'] : null);
+	private function adminModulesInit() {
+		
+		// Loop inicializing modules
+		foreach($this->modules as $key => $value) {
+			// Instanciate new module
+			$this->modules[$key] = new Module($key, $this->page, ADMIN_BOOL);
+			// Add module output to theme
+			$this->theme->setModuleOutput($this->modules[$key]);
+		}
 
 	}
+	
 
-	private function adminLogin() {
-		return new Theme(true, 'login');
-	}	
+	// ADMIN LOGIN FORM
+	// TODO: REBUILD TO BETTER VERSION
+	public static function loginForm() {
+
+		$errors = "";
+
+		// Login programming
+		if (isset($_POST['username'])) {
+			if (empty($_POST['username']) || empty($_POST['password']))
+				$errors .= "Missing username or password";
+
+			else {
+				self::$db->query("SELECT id,username,password FROM ".database::$prefix . "admin_user WHERE username = :username ");
+				self::$db->bind(":username", $_POST['username']);
+
+				$adminUserData = self::$db->single();
+
+				if ($_POST['password'] != $adminUserData['password']) {
+					$errors .= "Wrong password";
+				}
+
+				else {
+					$_SESSION['admin-user'] = $adminUserData['id'];
+				}
+
+
+
+				var_dump($adminUserData);
+
+			}
+		}
+
+
+		$formOutput = "
+			<em>
+				".$errors."
+			</em>
+			<br />
+			<br />
+			<form method=\"POST\">
+				Login: <input type=\"text\" name=\"username\"\><br />
+				Password: <input type=\"password\" name=\"password\"\><br />
+				<input type=\"submit\" value=\"LOGIN\"/>
+			</form>
+		";
+
+		return $formOutput;
+	}
+
+
 
 }
 

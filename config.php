@@ -19,11 +19,13 @@
 
 
 	/* DIR Configuration */
-	$_config['web']['tpldir'] = '/projects/loveart_cms';
+	$_config['web']['serverdir'] = '/projects/loveart_cms';
 
 	$_config['web']['basedir'] = ROOTPATH;
 
-	$_config['web']['url'] = 'http://localhost/projekty/loveart_cms';
+	$_config['web']['url'] = 'http://localhost/projects/loveart_cms';
+
+	$_config['admin']['url'] = 'http://localhost/projects/loveart_cms/admin';
 
 
 	/* Web configurations */
@@ -44,6 +46,6 @@
 
 
 	/* Debugger */
-	$_config['web']['debug'] = false;
-	$_config['admin']['debug'] = false;
+	$_config['web']['debug'] = true;
+	$_config['admin']['debug'] = true;
 ?>	

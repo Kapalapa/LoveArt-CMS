@@ -20,10 +20,13 @@
 	spl_autoload_register(array('autoLoading', 'classLoader'));
 
 	// Set web dir
-	web::$dir = $_config['web']['basedir'];
+	admin::$dir = $_config['web']['basedir'];
+	admin::$serverDir = $_config['web']['serverdir'];
+	admin::$webUrl = $_config['web']['url'];
+	admin::$adminUrl = $_config['admin']['url'];
 
+	
 	// Set theme web dir
-	theme::$workingDir = $_config['web']['tpldir'];
 	theme::$themesAdminDir = 'themes/admin';
 
 	// Instanciate main object of website

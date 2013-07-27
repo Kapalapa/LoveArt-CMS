@@ -2,8 +2,6 @@
 
 class Theme {
 
-	// Themes working directory
-	public static $workingDir = '';
 
 	// Themes web directory
 	public static $themesWebDir = 'themes/web'; 
@@ -55,7 +53,7 @@ class Theme {
 		$this->themeData = $this->loadThemeData();
 
 		// Add absolute path to template
-		$this->templateReplace('absolute_path',  theme::$workingDir . '/' . $this->themedir . '/');
+		$this->templateReplace('absolute_path',  web::$serverDir . '/' . $this->themedir . '/');
 	}
 
 	/* Method to get theme string
@@ -80,6 +78,8 @@ class Theme {
 		}		 
 
 	}
+
+
 	
 	/* Method that make replace of part of template to module output
 	 * @param $subject place identificator

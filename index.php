@@ -19,10 +19,14 @@
 
 	// Set web dir
 	web::$dir = $_config['web']['basedir'];
+	web::$serverDir = $_config['web']['serverdir'];
+	web::$webUrl = $_config['web']['url'];
+	web::$adminUrl = $_config['admin']['url'];
 
 	// Set theme web dir
-	theme::$workingDir = $_config['web']['tpldir'];
 	theme::$themesWebDir = 'themes/web';
+
+
 
 	// Instanciate main object of website
 	$website = new Web($_config);

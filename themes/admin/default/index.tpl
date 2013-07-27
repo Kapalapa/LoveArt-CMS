@@ -14,7 +14,16 @@
 			     
 	    <title><% title %></title>
   	</head>
-  	<body>
-		Administrace
+  	<body align="center">
+		<h3>Administrace</h3>
+		<table border="1" cellpading="0" cellspacing="0" align="center">
+			<tr>
+				<td colspan="3" width="1000" align="right"><% admin_user_status %></td>
+			</tr>
+			<tr>
+				<td width="200"  align="left" valign="top"><% menu %></td><td><% content %></td>
+			</tr>
+		</table>
+		
 	</body>
 </html>

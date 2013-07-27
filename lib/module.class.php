@@ -13,6 +13,9 @@ class Module {
     */ 
 	public function __construct($modulename, $page, $admin) {
 		
+
+		$this->moduleOutput[$modulename] = "";
+
 		// Load plugins to module
 		switch($modulename) {
 			
@@ -22,27 +25,39 @@ class Module {
 				break;
 		
 			case 'admin_login':
-				$this->moduleOutput[$modulename] = admin::loginForm();
+				$this->moduleOutput[$modulename] .= admin::loginForm();
 				break;
+
+			case 'menu':
+				$this->moduleOutput[$modulename] .= (!$admin) ? web::genMenu() : admin::genMenu(); 
+				break;
+
+			case 'admin_user_status':
+				$this->moduleOutput[$modulename] .= admin::adminUserStatus();
 
 			// others modules -> get plugins	
 			default:
 				// Load module data
+				// Try to load PLUGIN_ID and specific plugin. If plugin_id is 0, then try to load static_data which content specific operation
 
 				$contentTable =  (!$admin) ? "content" : "admin_content";
+				$moduletable = (!$admin) ? "module" : "admin_module";
+
 				web::$db->query("
 				SELECT
 						".database::$prefix ."plugin.name,
-						".database::$prefix . $contentTable .".plugin_instance_id
+						".database::$prefix . $contentTable .".plugin_id,
+						".database::$prefix . $contentTable .".plugin_instance_id,
+						".database::$prefix . $contentTable .".static_data
 				FROM 	
-						".database::$prefix . "module,
+						".database::$prefix . $moduletable .",
 						".database::$prefix . $contentTable .", 
 						".database::$prefix . "plugin	
 				WHERE 	
-						".database::$prefix . "module.name = :modulename AND
+						".database::$prefix . $moduletable . ".name = :modulename AND
 						page_id = :pageid AND
-						plugin_id = ".database::$prefix . "plugin.id AND
-						module_id = ".database::$prefix . "module.id
+						(plugin_id = ".database::$prefix . "plugin.id OR static_data IS NOT NULL) AND
+						module_id = ".database::$prefix . $moduletable . ".	id
 				ORDER BY rank
 				 ");
 				web::$db->bind(":modulename", $modulename);
@@ -77,15 +92,26 @@ class Module {
 	private function loadModule($modulename, $page) {
 
 		$plugin = "";
-
-		$this->moduleOutput[$modulename] = "";
 		
 		// Call plugin
 		foreach ($this->moduleData as $key => $pluginData) {
-			$plugin = new $pluginData['name']($pluginData['plugin_instance_id']);
-			$this->moduleOutput[$modulename] .= $plugin->getOutput();
-		}
-		
+			
+			if ($pluginData['plugin_id'] != 0)	{
+				$plugin = new $pluginData['name']($pluginData['plugin_instance_id']);
+				$this->moduleOutput[$modulename] .= $plugin->getOutput();
+			}
+
+			else {
+				switch($pluginData['static_data'])	{
+
+					case 'settings'
+:						$this->moduleOutput[$modulename] .= admin::settingContent();
+						break;
+
+				}
+
+			}
+		}		
 	}
 
 	/* Data output of module

@@ -1,6 +1,6 @@
 <?php
 
-define("DEFAULT_ADMIN_PAGE", "homepage");
+define("DEFAULT_ADMIN_PAGE", "about");
 define("ADMIN_BOOL", true);
 
 
@@ -10,8 +10,17 @@ class Admin extends Web {
 	private $modules = array (
 		'head' => '',
 		'absolute_path' => '',
-		'admin_login' => ''
+		'admin_login' => '',
+		'content' => '',
+		'menu' => '',
+		'admin_user_status' => ''
 	);
+
+	private $adminUserData;
+
+	public static $settingPage = 'settings';
+
+	public static $settingModule = 'content';
 
 
 	/* Admin inicialization is subclass of web
@@ -32,15 +41,25 @@ class Admin extends Web {
 		// Configure website from database data
 		$this->loadWebConfig($_config['admin']['settings'], true);
 
+		// Check signout
+		if ($act_page == "signout")	{
+			session_unset();
+			globals::redirect(admin::$adminUrl);
+		}
+
 		// Get page from db
 		$this->page = $this->loadPage($act_page, true);
 
 		// Inicialize theme
-
-		if (!isset($_SESSION['admin-user']))
+		if (!isset($_SESSION['admin-user']))	
 			$this->theme = new Theme(ADMIN_BOOL, 'login');
-		else
+		else {
+			
 			$this->theme = new Theme(ADMIN_BOOL, (!empty($this->page['theme'])) ? $this->page['theme'] : null);
+			
+			// TODO: LOAD ADMIN USER DATA
+		}
+
 		// Inicialize modules
 		$this->adminModulesInit();
 
@@ -48,6 +67,8 @@ class Admin extends Web {
 
 	}
 
+	/* Inicialize admin modules
+	 */
 	private function adminModulesInit() {
 		
 		// Loop inicializing modules
@@ -61,6 +82,19 @@ class Admin extends Web {
 	}
 	
 
+	/* Generate admin user status
+	 * @return output generated data
+	 */
+	public static function adminUserStatus() {
+
+		$userStatus = "Admin user status <br />";
+
+		$userStatus .= "<a href=\"".admin::$adminUrl ."/signout\" title=\" Sign Out \">Sign out</a>";
+
+		return $userStatus;
+	}
+
+
 	// ADMIN LOGIN FORM
 	// TODO: REBUILD TO BETTER VERSION
 	public static function loginForm() {
@@ -73,23 +107,19 @@ class Admin extends Web {
 				$errors .= "Missing username or password";
 
 			else {
-				self::$db->query("SELECT id,username,password FROM ".database::$prefix . "admin_user WHERE username = :username ");
+				self::$db->query("SELECT id, username, password, last_login FROM ".database::$prefix . "admin_user WHERE username = :username ");
 				self::$db->bind(":username", $_POST['username']);
 
-				$adminUserData = self::$db->single();
+				$this->adminUserData = self::$db->single();
 
-				if ($_POST['password'] != $adminUserData['password']) {
+				if ($_POST['password'] != $this->adminUserData['password']) {
 					$errors .= "Wrong password";
 				}
 
 				else {
-					$_SESSION['admin-user'] = $adminUserData['id'];
+					$_SESSION['admin-user'] = $this->adminUserData['id'];
+					globals::redirect(admin::$adminUrl);
 				}
-
-
-
-				var_dump($adminUserData);
-
 			}
 		}
 
@@ -110,8 +140,65 @@ class Admin extends Web {
 		return $formOutput;
 	}
 
+	/* Generate menu
+	 * @return menu output
+	 * TODO: MAKE IT LOOKING BETTER CODE, BUT FUNCIONALITY SHOULD STAY
+	 */
+
+	public static function genMenu()	{
+
+		$menuLi = "";
+
+		self::$db->query("SELECT id, name, title, parent_id, rank FROM ".database::$prefix . "admin_menu ORDER BY rank");
+
+		$data = self::$db->resultset();
+
+		foreach($data as $key => $value) {
+			if (is_null($value['parent_id'])) {
+				$menuLi .= "<li><a href=\"". admin::$adminUrl . "/" . $value['name']."\" title=\"". $value['title']."\">" . $value['title'] . "</a>";
+				foreach ($data as $key2 => $value2) {
+					if ($value2['parent_id'] == $value['id'])
+						$menuLi .= "<br />" . $value2['name'];
+				}
+
+				$menuLi .= "</li>";
+			}
+
+		}
+
+		$menuOutput = "
+			<ul>
+				"
+					. $menuLi .
+				"
+			</ul>";
+
+		return $menuOutput;
+	}
 
 
+	/* Generate admin settings
+  	 * @return settings content
+	 */
+	public static function settingContent()	{
+
+		$settingsOutput = "
+			<br />
+			<form>
+				Title: <input type=\"text\" name=\"title\"/><br />
+				Descriptions: <input type=\"text\" name=\"title\"/><br />
+				Keywords: <input type=\"text\" name=\"title\"/><br />
+				Descriptions: <input type=\"text\" name=\"title\"/><br />
+				Author: <input type=\"text\" name=\"title\" disabled/><br />
+				Copyrights: <input type=\"text\" name=\"title\"/><br />
+				<input type=\"submit\" value=\"Save\"/>
+			</form>
+			<br />
+
+		";
+
+		return $settingsOutput;
+	}
 }
 
 ?>

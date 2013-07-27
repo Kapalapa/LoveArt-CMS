@@ -8,6 +8,15 @@ class Web {
 	// Dir
 	public static $dir;
 
+	// Server dir
+	public static $serverDir;
+
+	// Web url
+	public static $webUrl;
+
+	// Admin url
+	public static $adminUrl;
+
 	// Title
 	public static $settings = array();
 
@@ -31,7 +40,7 @@ class Web {
 		'head' => '',
 		'content' => '',
 		'absolute_path' => '',
-		'admin_login' => ''
+		'admin_login' => '',
 	);
 
 	/* WEB inicialization
@@ -129,8 +138,6 @@ class Web {
 			return $this->missingPage($page, $admin);
 		}
 
-		(self::$debug ) ? var_dump(self::$db->single()) : null;
-
 		return $results;
 	}
 
@@ -164,7 +171,7 @@ class Web {
 	}
 
 	/* Show website output
-	 * @return string with output data
+	 * @return string with output data 	 	
 	 */
 	public function showWebsite() {
 		return $this->theme->getThemeData();

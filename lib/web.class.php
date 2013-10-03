@@ -147,8 +147,7 @@ class Web {
 	 * @param $admin admin handler
 	*/
 	protected function missingPage($page, $admin) {
-
-		echo "sdasdsad";
+		
 		$missingPage['id'] = -1;
 		$missingPage['theme'] = '404_notfound';
 

@@ -104,8 +104,8 @@ class Module {
 			else {
 				switch($pluginData['static_data'])	{
 
-					case 'settings'
-:						$this->moduleOutput[$modulename] .= admin::settingContent();
+					case 'settings':
+						$this->moduleOutput[$modulename] .= admin::settingContent();
 						break;
 
 				}

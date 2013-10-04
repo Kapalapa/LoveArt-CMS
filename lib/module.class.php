@@ -13,7 +13,7 @@ class Module {
     */ 
 	public function __construct($modulename, $page, $admin) {
 		
-
+		// Array due to module 
 		$this->moduleOutput[$modulename] = "";
 
 		// Load plugins to module
@@ -29,6 +29,7 @@ class Module {
 				break;
 
 			case 'menu':
+
 				$this->moduleOutput[$modulename] .= (!$admin) ? web::genMenu() : admin::genMenu(); 
 				break;
 
@@ -93,7 +94,8 @@ class Module {
 
 		$plugin = "";
 		
-		// Call plugin
+		// Call all plugins (their concrete instance - to allow more instance of same plugin)
+		// related to specific module
 		foreach ($this->moduleData as $key => $pluginData) {
 			
 			if ($pluginData['plugin_id'] != 0)	{

@@ -72,7 +72,8 @@ class Theme {
 		// Get templates of module
 		$templates = $module->getOutput();
 
-		// Add tempates to data output
+		// Add tempates to data output - its array becouse one module can consits of child modules
+		// to pretend big count of modules, all childs has to be set to display right
 		foreach($templates as $position => $template) {
 			$this->templateReplace($position, $template);
 		}		 
@@ -97,11 +98,17 @@ class Theme {
 
 		// Set theme folder
 		$themefolder = ($this->admin) ? self::$themesAdminDir : self::$themesWebDir; 
-
+		try {
 
 		// If file not exit's, throw expcetion
 		if (($readData = file_get_contents(web::$dir . '/' . $this->themedir . '/' . $this->filename)) === FALSE)
 			throw new Exception('Theme\'s file doent exists');
+		}
+
+		catch (PDOException $e) {
+			self::$errors['db'] = $e->getMessage();
+			self::$settings = $settings;
+		}	
 
 		// return string with data
 		return $readData;	

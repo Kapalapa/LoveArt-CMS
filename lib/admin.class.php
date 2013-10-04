@@ -7,7 +7,7 @@ define("ADMIN_BOOL", true);
 
 class Admin extends Web {
 
-	private $modules = array (
+	protected $modules = array (
 		'head' => '',
 		'absolute_path' => '',
 		'admin_login' => '',
@@ -32,6 +32,9 @@ class Admin extends Web {
 		// Set debug mode
 		self::$debug = $_config['admin']['debug'];
 
+		// Set admin
+		$this->admin = true;
+
 		// Set active page
 		$act_page = (!empty($_GET['page'])) ?  $_GET['page'] : DEFAULT_ADMIN_PAGE;
 
@@ -48,7 +51,7 @@ class Admin extends Web {
 		}
 
 		// Get page from db
-		$this->page = $this->loadPage($act_page, true);
+		$this->page = $this->loadPage($act_page);
 
 		// Inicialize theme
 		if (!isset($_SESSION['admin-user']))	
@@ -61,26 +64,11 @@ class Admin extends Web {
 		}
 
 		// Inicialize modules
-		$this->adminModulesInit();
+		$this->ModulesInit();
 
 		(self::$debug ) ? var_dump(self::$errors) : null;
 
-	}
-
-	/* Inicialize admin modules
-	 */
-	private function adminModulesInit() {
-		
-		// Loop inicializing modules
-		foreach($this->modules as $key => $value) {
-			// Instanciate new module
-			$this->modules[$key] = new Module($key, $this->page, ADMIN_BOOL);
-			// Add module output to theme
-			$this->theme->setModuleOutput($this->modules[$key]);
-		}
-
-	}
-	
+	}	
 
 	/* Generate admin user status
 	 * @return output generated data
@@ -99,6 +87,7 @@ class Admin extends Web {
 	// TODO: REBUILD TO BETTER VERSION
 	public static function loginForm() {
 
+
 		$errors = "";
 
 		// Login programming
@@ -110,14 +99,14 @@ class Admin extends Web {
 				self::$db->query("SELECT id, username, password, last_login FROM ".database::$prefix . "admin_user WHERE username = :username ");
 				self::$db->bind(":username", $_POST['username']);
 
-				$this->adminUserData = self::$db->single();
+				$adminLoginData = self::$db->single();
 
-				if ($_POST['password'] != $this->adminUserData['password']) {
+				if ($_POST['password'] != $adminLoginData['password']) {
 					$errors .= "Wrong password";
 				}
 
 				else {
-					$_SESSION['admin-user'] = $this->adminUserData['id'];
+					$_SESSION['admin-user'] = $adminLoginData['id'];
 					globals::redirect(admin::$adminUrl);
 				}
 			}
@@ -142,7 +131,6 @@ class Admin extends Web {
 
 	/* Generate menu
 	 * @return menu output
-	 * TODO: MAKE IT LOOKING BETTER CODE, BUT FUNCIONALITY SHOULD STAY
 	 */
 
 	public static function genMenu()	{
@@ -156,10 +144,13 @@ class Admin extends Web {
 		foreach($data as $key => $value) {
 			if (is_null($value['parent_id'])) {
 				$menuLi .= "<li><a href=\"". admin::$adminUrl . "/" . $value['name']."\" title=\"". $value['title']."\">" . $value['title'] . "</a>";
-				foreach ($data as $key2 => $value2) {
-					if ($value2['parent_id'] == $value['id'])
-						$menuLi .= "<br />" . $value2['name'];
+				$submenuLi = "";
+				foreach ($data as $key_child => $value_child) {
+					if ($value_child['parent_id'] == $value['id'])
+						$submenuLi .= "<li><a href=\"". admin::$adminUrl . "/" . $value_child['name']."\" title=\"\">" . $value_child['title'] ."</a></li>";
+						
 				}
+				$menuLi .= (!empty($submenuLi)) ? "<ul>" . $submenuLi . "</ul>" : "";
 
 				$menuLi .= "</li>";
 			}

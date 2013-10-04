@@ -1,7 +1,6 @@
 <?php
 
 define ("DEFAULT_PAGE", "homepage");
-define("WEB_BOOL", false);
 
 class Web {
 
@@ -32,15 +31,18 @@ class Web {
 	// Theme handler
 	protected $theme;
 
+	// Admin handler
+	protected $admin = false;
+
 	// FOR NOW: hash with error messages
 	public static $errors = array();
 
 	// Modules
-	private $modules = array (
+	protected $modules = array (
 		'head' => '',
 		'content' => '',
 		'absolute_path' => '',
-		'admin_login' => '',
+		'admin_login' => ''
 	);
 
 	/* WEB inicialization
@@ -67,7 +69,7 @@ class Web {
 		$this->theme = $this->webThemeInit();
 
 		// Inicialize modules
-		$this->webModulesInit();
+		$this->ModulesInit();
 
 		// DEBUG: show errors
 		(self::$debug ) ? var_dump(self::$errors) : null;
@@ -77,10 +79,10 @@ class Web {
 	/* Load webconfig from database, if empty, use configuration file settings
 	 * @param $config configuration data array - specific for admin and web
 	*/
-	protected function loadWebConfig($settings, $admin = false) {
+	protected function loadWebConfig($settings) {
 
 		// Set table where pages are
-		$settingsTable = (!$admin) ? "settings" : "admin_settings";
+		$settingsTable = (!$this->admin) ? "settings" : "admin_settings";
 
 		// Select web settings from database	
 		try {
@@ -91,11 +93,12 @@ class Web {
 			if (!(self::$settings = self::$db->single()))
 				self::$settings = $settings;
 
-			// If specific settings is empty in DB, load from config
-			foreach($settings as $key => $value) {
-				if (empty(self::$settings[$key]))
-					self::$settings[$key] = $settings[$key];
-			}
+			else
+				// If specific settings is empty in DB, load from config
+				foreach($settings as $key => $value) {
+					if (empty(self::$settings[$key]))
+						self::$settings[$key] = $settings[$key];
+				}
 
 		}
 
@@ -114,10 +117,10 @@ class Web {
 	 * @param $page active page
 	 * @return hash with page info
 	*/
-	protected function loadPage($page, $admin = false) {
+	protected function loadPage($page) {
 
 		// Set table where pages are
-		$pageTable = (!$admin) ? "page" : "admin_page";
+		$pageTable = (!$this->admin) ? "page" : "admin_page";
 
 		try {
 			// Load page data from DB
@@ -127,7 +130,7 @@ class Web {
 			$results = self::$db->single();
 
 			if (empty($results))
-				return $this->missingPage($page, $admin);
+				return $this->missingPage($page);
 		
 		}
 
@@ -135,7 +138,7 @@ class Web {
 		catch (PDOException $e) {
 			self::$errors['db'] = $e->getMessage();
 			// Generate missing page
-			return $this->missingPage($page, $admin);
+			return $this->missingPage($page);
 		}
 
 		return $results;
@@ -146,8 +149,8 @@ class Web {
 	 * @param $page page name
 	 * @param $admin admin handler
 	*/
-	protected function missingPage($page, $admin) {
-		
+	protected function missingPage($page) {
+
 		$missingPage['id'] = -1;
 		$missingPage['theme'] = '404_notfound';
 
@@ -157,12 +160,12 @@ class Web {
 
 	/* Init modules on webpage
 	*/
-	protected function webModulesInit() {
+	protected function ModulesInit() {
 		
 		// Loop inicializing modules
 		foreach($this->modules as $key => $value) {
 			// Instanciate new module
-			$this->modules[$key] = new Module($key, $this->page, WEB_BOOL);
+			$this->modules[$key] = new Module($key, $this->page, $this->admin);
 			// Add module output to theme
 			$this->theme->setModuleOutput($this->modules[$key]);
 		}
@@ -186,7 +189,7 @@ class Web {
 		(self::$debug ) ? var_dump($this->page) : null;
 
 		// Instanciate theme
-		return new Theme(false, (!empty($this->page['theme'])) ? $this->page['theme'] : null);
+		return new Theme($this->admin, (!empty($this->page['theme'])) ? $this->page['theme'] : null);
 
 	}
 }

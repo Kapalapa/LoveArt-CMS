@@ -6,7 +6,7 @@ class StaticContent {
 	private $staticData = '';
 
 	public function __construct($instance_id) {
-		$this->staticData = 'Miluju te niky';
+		$this->staticData = 'Test';
 	}
 
 	public function getOutput() {

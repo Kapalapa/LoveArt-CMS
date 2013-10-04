@@ -26,6 +26,8 @@
 	// Set theme web dir
 	theme::$themesWebDir = 'themes/web';
 
+
+
 	// Instanciate main object of website
 	$website = new Web($_config);
 

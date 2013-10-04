@@ -4,6 +4,7 @@
 	define('ROOTPATH', dirname(__FILE__));
 
 	/* DB Configuration */
+
 	$_config['db']['server'] = 'localhost';
 
 	$_config['db']['dbname'] = 'loveart_cms';
@@ -46,5 +47,5 @@
 
 	/* Debugger */
 	$_config['web']['debug'] = false;
-	$_config['admin']['debug'] = true;
-?>	
+	$_config['admin']['debug'] = false;
+?>

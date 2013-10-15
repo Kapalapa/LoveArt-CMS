@@ -15,7 +15,7 @@ class Theme {
 	// Active admin theme
 	public static $activeAdminTheme = 'default';
 
-	// Filename
+	// Filename of page theme
 	private $filename = '';
 
 	// Theme full dir
@@ -34,8 +34,6 @@ class Theme {
 		// Set admin status
 		$this->admin = $admin;
 
-		// DEBUG OUTPUT
-		(web::$debug ) ? var_dump($this->admin) : null;
 
 		$this->filename = ($specific == NULL) ? 'index.tpl' : $specific .'.tpl';
 
@@ -50,10 +48,10 @@ class Theme {
 		$this->themedir = ($this->admin) ? self::$themesAdminDir . '/' . self::$activeAdminTheme : self::$themesWebDir . '/' . self::$activeTheme;
 
 		// Load theme from file
-		$this->themeData = $this->loadThemeData();
+		$this->themeData = $this->loadTemplateData($this->filename);
 
 		// Add absolute path to template
-		$this->templateReplace('absolute_path',  web::$serverDir . '/' . $this->themedir . '/');
+		$this->themeData = $this->templateReplace('absolute_path',  web::$serverDir . '/' . $this->themedir . '/', $this->themeData);
 	}
 
 	/* Method to get theme string
@@ -69,45 +67,44 @@ class Theme {
     */ 
 	public function setModuleOutput($module) {
 
-		// Get templates of module
-		$templates = $module->getOutput();
+		// Get output of module
+		$module_outputs = $module->getOutput();
 
-		// Add tempates to data output - its array becouse one module can consits of child modules
+		// Add modules output to web output - its array becouse one module can consits of child modules
 		// to pretend big count of modules, all childs has to be set to display right
-		foreach($templates as $position => $template) {
-			$this->templateReplace($position, $template);
+		foreach($module_outputs as $position => $item) {
+			$this->themeData = $this->templateReplace($position, $item, $this->themeData);
 		}		 
 
 	}
 
-
-	
 	/* Method that make replace of part of template to module output
 	 * @param $subject place identificator
 	 * @param $item module to insert
 	*/
-	private function templateReplace($subject, $item) {
+	private function templateReplace($subject, $item, $template) {
 
-		$this->themeData = str_replace('<% '. $subject .' %>', $item, $this->themeData);
+		return str_replace('<% '. $subject .' %>', $item, $template);
+	
 	}
 
 	/* Method to load theme data from file to string
 	 * @return theme data string
 	*/
-	private function loadThemeData() {
+	private function loadTemplateData($filename) {
 
 		// Set theme folder
 		$themefolder = ($this->admin) ? self::$themesAdminDir : self::$themesWebDir; 
+		
 		try {
 
 		// If file not exit's, throw expcetion
-		if (($readData = file_get_contents(web::$dir . '/' . $this->themedir . '/' . $this->filename)) === FALSE)
+		if (($readData = file_get_contents(web::$dir . '/' . $this->themedir . '/' . $filename)) === FALSE)
 			throw new Exception('Theme\'s file doent exists');
 		}
 
 		catch (PDOException $e) {
-			self::$errors['db'] = $e->getMessage();
-			self::$settings = $settings;
+			self::$errors['theme'] = $e->getMessage();
 		}	
 
 		// return string with data
